@@ -653,6 +653,7 @@ Example 12 - Getting multiple external values
 We need external values from multiple levels pulled into the output.
 
 ::
+
    xml = """<?xml version="1.0"?>
     <catalog>
        <lowest number="123">
@@ -827,6 +828,7 @@ We need external values from multiple levels pulled into the output.
     </catalog>"""
 
 ::
+
    profile = """catalog
     lowest
         number = external_dataset:__external_value__1
@@ -845,6 +847,7 @@ We need external values from multiple levels pulled into the output.
 This profile will output number and specificvalue coming from different levels into the output dataset 1
 
 ::
+
    [{'author': 'Gambardella, Matthew',
           'description': 'An in-depth look at creating applications\n         with XML.',
           'genre': 'Computer',
