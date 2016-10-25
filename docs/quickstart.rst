@@ -827,6 +827,8 @@ We need external values from multiple levels pulled into the output.
        </lowest>
     </catalog>"""
 
+Here is a profile that can pull number and specificvalue from different levels into the output.
+
 ::
 
    profile = """catalog
