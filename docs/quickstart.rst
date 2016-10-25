@@ -650,7 +650,7 @@ Thanks to keluc for this one, xmldataset works well as an input to pandas with t
 Example 12 - Getting multiple external values
 ---------------------------------------------
 
-We need external values from multiple levels pulled into the output.
+We need external values from multiple levels pulled into the output. Consider this input with additional tags such as specificvalue to demonstrate the example
 
 ::
 
