@@ -1,4 +1,5 @@
 from xmldataset import parse_using_profile
+from xmldataset import profile_gen
 import pprint
 
 # ------------------------------------------------------------------------------
@@ -172,4 +173,11 @@ pp = ppsetup.pprint
 # ------------------------------------------------------------------------------
 #    Call parse_using_profile
 # ------------------------------------------------------------------------------
+print('Parse using profile output : \n')
 print(parse_using_profile(xml, profile))
+
+# ------------------------------------------------------------------------------
+#    Call profile_gen
+# ------------------------------------------------------------------------------
+print('\n\n\n Profile Gen output : \n')
+print(profile_gen(xml))

@@ -9,6 +9,7 @@ __version__ = '1.0.1'
 
 import re
 import logging
+from lxml import etree
 
 # ------------------------------------------------------------------------------
 #   Attempt to use cElementTree, otherwise fall back on ElementTree
@@ -775,3 +776,73 @@ def parse_using_profile(xml, profile, **options):
         #    Otherwise return the data structure
         # ------------------------------------------------------------------------------
         return obj.data_structure
+
+def profile_gen(xml, stats=None):
+    """Generates profile file from given xml"""
+
+    # Extract the xml root object
+    xroot = etree.fromstring(xml)
+
+    # Get the xml tree
+    xtree = etree.ElementTree(xroot)
+
+    #output placeholder
+    nodes=[]
+
+    #Parse through the xml tree and process the elements
+    for e_idx,e in enumerate(xroot.iter()):
+        path = xtree.getpath(e)
+
+        # create path list
+        path_list = path.split('/')
+
+        # remove first empty from the path list
+        path_list = filter(None,path_list)
+
+        #remove the [*] from the items
+        for p_idx, item in enumerate(path_list):
+            path_list[p_idx]= re.sub('\[.+]','',item)
+
+        # Append to nodes only if it seen for the first time
+        if not path_list in nodes:
+
+            # determine correct position to insert.
+            # Append the root to nodes
+            if len(nodes) == 0 :
+                nodes.append(path_list)
+
+            # processing for other nodes
+            else:
+                len_of_nodes = len(nodes)
+                pl_parent       = path_list[:-1]
+                pl_parent_index = len(path_list) - 1
+
+                # process the nodes in reverse order to find the correct position to insert the path list (pl)
+                for n_idx,n in enumerate(reversed(nodes)):
+
+                    insert_pos = (len(nodes) - n_idx )
+                    cur_item_ancestor_matching_pl_parent_level = n[:len(path_list) - 1]
+
+                    # if i reached parent first then it means there are no siblings so insert it next to the parent
+                    if n == pl_parent:
+                        nodes.insert(insert_pos,path_list)
+                        break
+
+                    #if i see my sibling or sibling's tree first then add it next
+                    elif cur_item_ancestor_matching_pl_parent_level== pl_parent:
+                        nodes.insert(insert_pos, path_list)
+                        break
+
+    # all done , reformat and print nodes as necessary
+    nodes_profile_format = []
+
+    for n in nodes:
+        o_str = ''.join('\t'*(len(n)-1)) + n[-1]
+        nodes_profile_format.append(o_str)
+
+    nodes_profile_format_str = '\n'.join(nodes_profile_format)
+
+    return nodes_profile_format_str
+
+
+

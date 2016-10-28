@@ -14,6 +14,7 @@ except ImportError:
    import unittest
 
 from xmldataset import parse_using_profile
+from xmldataset import profile_gen
 
 class TestImports(unittest.TestCase):
     ''' Tests imports '''
@@ -2767,6 +2768,38 @@ class TestCreateObject(unittest.TestCase):
         output = parse_using_profile(self.xml, profile, global_values = {'location' : 'Chorleywood'})
         self.maxDiff = None
         self.assertDictEqual(expected, output)
+
+
+    def test_profile_gen(self):
+        expected = """catalog
+	lowest
+		specificbefore
+			specificvalue
+		book
+			optionalexternalstart
+				externaldata
+			author
+			title
+			genre
+			price
+			publish_date
+			description
+			optionalexternalend
+				externaldata
+		book2
+			author
+			title
+			genre
+			price
+			publish_date
+			description
+		specificafter
+			specificvalue"""
+
+        output = profile_gen(self.xml)
+        self.maxDiff = None
+        self.assertEqual(expected, output)
+
 
 
 if __name__ == '__main__':
