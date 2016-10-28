@@ -801,7 +801,7 @@ def profile_gen(xml, stats=None):
 
         #remove the [*] from the items
         for p_idx, item in enumerate(path_list):
-            path_list[p_idx]= re.sub('\[.+]','',item)
+            path_list[p_idx]= str(re.sub('\[.+]','',item))
 
         # Append to nodes only if it seen for the first time
         if not path_list in nodes:
