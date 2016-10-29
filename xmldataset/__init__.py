@@ -798,9 +798,9 @@ def process_nodes(nodes, path_list):
         # processing for other nodes
         # ------------------------------------------------------------------------------
         else:
-            len_of_nodes = len(nodes)
+            # len_of_nodes = len(nodes)
             pl_parent = path_list[:-1]
-            pl_parent_index = len(path_list) - 1
+            # pl_parent_index = len(path_list) - 1
 
             # ------------------------------------------------------------------------------
             # process the nodes in reverse order to find the correct position to insert the path list (pl)
@@ -825,7 +825,7 @@ def process_nodes(nodes, path_list):
                     break
 
 
-def profile_gen(xml, stats=None):
+def profile_gen(xml,include_attributes=False):
     """Generates profile file from given xml"""
 
     # ------------------------------------------------------------------------------
@@ -839,15 +839,19 @@ def profile_gen(xml, stats=None):
     xtree = etree.ElementTree(xroot)
 
     # ------------------------------------------------------------------------------
-    #output placeholder
+    # output placeholder
     # ------------------------------------------------------------------------------
     nodes=[]
 
     # ------------------------------------------------------------------------------
-    #Parse through the xml tree and process the elements
+    # Parse through the xml tree and process the elements
     # ------------------------------------------------------------------------------
-    for e_idx,e in enumerate(xroot.iter()):
-        path = xtree.getpath(e)
+    for e_idx, element in enumerate(xroot.iter()):
+
+        # ------------------------------------------------------------------------------
+        # get the full path of the element
+        # ------------------------------------------------------------------------------
+        path = xtree.getpath(element)
 
         # ------------------------------------------------------------------------------
         # create path list
@@ -860,15 +864,23 @@ def profile_gen(xml, stats=None):
         path_list = path_list[1:]
 
         # ------------------------------------------------------------------------------
-        #remove the [*] from the items
+        # remove the [*] from the items
         # ------------------------------------------------------------------------------
         for p_idx, item in enumerate(path_list):
-            path_list[p_idx]= re.sub('\[.+]','',item)
+            path_list[p_idx]= re.sub('\[.+]' , '' , item)
 
         # ------------------------------------------------------------------------------
-        #remove the [*] from the items
+        # First process the element
         # ------------------------------------------------------------------------------
         process_nodes(nodes,path_list)
+
+        # ------------------------------------------------------------------------------
+        # process the xml element attributes if requested
+        # ------------------------------------------------------------------------------
+        if include_attributes:
+            for key in element.keys():
+                path_list = path_list+ [key]
+                process_nodes(nodes , path_list )
 
     # ------------------------------------------------------------------------------
     # all done , reformat and print nodes as necessary
@@ -882,7 +894,7 @@ def profile_gen(xml, stats=None):
     nodes_profile_format_str = '\n'.join(nodes_profile_format)
 
     # ------------------------------------------------------------------------------
-    # retunr the result
+    # return the result
     # ------------------------------------------------------------------------------
     return nodes_profile_format_str
 

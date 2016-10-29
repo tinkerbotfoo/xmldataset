@@ -2803,9 +2803,11 @@ class TestCreateObject(unittest.TestCase):
     def test_profile_gen_with_attributes(self):
         expected = """catalog
 	lowest
+		number
 		specificbefore
 			specificvalue
 		book
+			id
 			optionalexternalstart
 				externaldata
 			author
@@ -2817,6 +2819,7 @@ class TestCreateObject(unittest.TestCase):
 			optionalexternalend
 				externaldata
 		book2
+			id
 			author
 			title
 			genre
@@ -2826,7 +2829,7 @@ class TestCreateObject(unittest.TestCase):
 		specificafter
 			specificvalue"""
 
-        output = profile_gen(self.xml)
+        output = profile_gen(self.xml,include_attributes=True)
         self.maxDiff = None
         self.assertEqual(expected, output)
 
